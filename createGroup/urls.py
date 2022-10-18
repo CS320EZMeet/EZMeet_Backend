@@ -1,9 +1,9 @@
 from django.urls import path
-from . import createGroup
+from . import views
 
 #maps views to url
 
 ### local:8000/createGroup/
 urlpatterns = [
-    path('index', createGroup.index)
+    path('', views.index)
 ]

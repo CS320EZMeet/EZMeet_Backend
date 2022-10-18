@@ -20,5 +20,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('loginAuthentication/', include("loginAuthentication.urls")),
     path('createGroup/', include("createGroup.urls")),
-    path('findMidpoint/', include("findMidpoint.urls"))
+    path('findMidpoint/', include("findMidpoint.urls")),
+    path('accountProfile/', include("accountProfile.urls"))
 ]
