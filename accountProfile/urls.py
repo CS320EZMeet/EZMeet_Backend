@@ -1,9 +1,7 @@
-from django.urls import path
-from . import views
+from django.db import models
+from django.urls import include, path
+from accountProfile import views
 
-#maps views to url
-
-### local:8000/accountProfile/
 urlpatterns = [
-    path('', views.index)
+    path('', views.get),
 ]
