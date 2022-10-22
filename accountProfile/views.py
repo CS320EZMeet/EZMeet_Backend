@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 #from django.contrib.auth.models import User
 #from rest_framework import viewsets
 #from .serializers import UserSerializer
@@ -19,6 +20,7 @@ def preferences(request):
     return
 
 #name, addresses, profile pic?, gender, age?
+@csrf_exempt
 def get(request):
     if request.method == 'POST':
         return HttpResponse("This is a POST request.")
