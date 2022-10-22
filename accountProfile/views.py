@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+#from django.contrib.auth.models import User
+#from rest_framework import viewsets
+#from .serializers import UserSerializer
 
 # Create your views here.
-### functions or classes are mappted to urls
 
 #welcome page
 def index(request):
@@ -17,5 +19,8 @@ def preferences(request):
     return
 
 #name, addresses, profile pic?, gender, age?
-def basicInfo(request):
-    return
+def get(request):
+    if request.method == 'POST':
+        return HttpResponse("This is a POST request.")
+    else:    
+        return HttpResponse("This is not a POST request.")
