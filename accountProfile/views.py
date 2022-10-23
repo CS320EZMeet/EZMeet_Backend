@@ -29,7 +29,10 @@ def get(request):
         if body:
             body = json.loads(body)
             userObj = findUser(body['userName'])
-            return JsonResponse({"status": 200, 'success': True, 'data': userObj, 'message': 'User found'})
+            if userObj:
+                return JsonResponse({"status": 200, 'success': True, 'data': userObj, 'message': 'User found'})
+            else:
+                return JsonResponse({"status": 404, 'success': False, 'data': None, 'message': 'User not found'})
         else:
             return JsonResponse({"status": 400, 'success': False, 'message': "Invalid request, missing request body"})
     else:    

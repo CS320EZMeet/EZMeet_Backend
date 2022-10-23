@@ -13,4 +13,7 @@ def findUser(userName):
             cursor.execute("SELECT * FROM \"ezmeet-schema\".users WHERE name = %s", (userName,))
             columns = [desc[0] for desc in cursor.description]
             real_dict = [dict(zip(columns, row)) for row in cursor.fetchall()]
-    return real_dict[0]
+    if len(real_dict) != 0:
+        return real_dict[0]
+    else:
+        return None
