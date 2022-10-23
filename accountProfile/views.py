@@ -1,6 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from .models import findUser
+import json
 #from django.contrib.auth.models import User
 #from rest_framework import viewsets
 #from .serializers import UserSerializer
@@ -22,7 +24,13 @@ def preferences(request):
 #name, addresses, profile pic?, gender, age?
 @csrf_exempt
 def get(request):
-    if request.method == 'POST':
-        return HttpResponse("This is a POST request.")
+    if request.method == 'GET':
+        body = request.body
+        if body:
+            body = json.loads(body)
+            userObj = findUser(body['userName'])
+            return JsonResponse({"status": 200, 'success': True, 'data': userObj, 'message': 'User found'})
+        else:
+            return JsonResponse({"status": 400, 'success': False, 'message': "Invalid request, missing request body"})
     else:    
-        return HttpResponse("This is not a POST request.")
+        return JsonResponse({'status': 405,'success': False, 'message': 'This endpoint only supports GET requests.'})
