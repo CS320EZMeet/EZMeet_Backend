@@ -23,17 +23,12 @@ def preferences(request):
 
 #name, addresses, profile pic?, gender, age?
 @csrf_exempt
-def get(request):
+def get(request, userName):
     if request.method == 'GET':
-        body = request.body
-        if body:
-            body = json.loads(body)
-            userObj = findUser(body['userName'])
-            if userObj:
-                return JsonResponse({"status": 200, 'success': True, 'data': userObj, 'message': 'User found'})
-            else:
-                return JsonResponse({"status": 404, 'success': False, 'data': None, 'message': 'User not found'})
+        userObj = findUser(userName)
+        if userObj:
+            return JsonResponse({"status": 200, 'success': True, 'data': userObj, 'message': 'User found'})
         else:
-            return JsonResponse({"status": 400, 'success': False, 'message': "Invalid request, missing request body"})
+            return JsonResponse({"status": 404, 'success': False, 'data': None, 'message': 'User not found'})
     else:    
         return JsonResponse({'status': 405,'success': False, 'message': 'This endpoint only supports GET requests.'})

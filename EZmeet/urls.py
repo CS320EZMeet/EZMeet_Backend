@@ -21,5 +21,5 @@ urlpatterns = [
     path('loginAuthentication/', include("loginAuthentication.urls")),
     path('createGroup/', include("createGroup.urls")),
     path('findMidpoint/', include("findMidpoint.urls")),
-    path('user/', include("accountProfile.urls"))
+    path('user/<str:userName>', include("accountProfile.urls"))
 ]
