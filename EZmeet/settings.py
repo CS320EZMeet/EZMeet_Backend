@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-8ycr0ydh(k$c%3b1(j9@=4r_(u8y@pd#9e=1yx*8qh$$yvtolv
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['ezmeet2022.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['ezmeet2022.herokuapp.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
