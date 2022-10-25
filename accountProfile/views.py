@@ -27,8 +27,8 @@ def get(request, userName):
     if request.method == 'GET':
         userObj = findUser(userName)
         if userObj:
-            return JsonResponse({"status": 200, 'success': True, 'data': userObj, 'message': 'User found'})
+            return JsonResponse(data = {"status": 200, 'success': True, 'data': userObj, 'message': 'User found'}, status = 200)
         else:
-            return JsonResponse({"status": 404, 'success': False, 'data': None, 'message': 'User not found'})
+            return JsonResponse(data = {"status": 404, 'success': False, 'data': None, 'message': 'User not found'}, status = 404)
     else:    
-        return JsonResponse({'status': 405,'success': False, 'message': 'This endpoint only supports GET requests.'})
+        return JsonResponse(data = {'status': 405,'success': False, 'message': 'This endpoint only supports GET requests.'}, status = 405)
