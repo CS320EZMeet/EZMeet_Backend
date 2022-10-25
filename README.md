@@ -23,8 +23,8 @@ Once the virtual environment is activated, run the following command to install 
 pip install -r requirements.txt
 ```
 
-**Note** 
-This server is hosted on Heroku which uses a linux system to host the servers. So, if you are using a windows system, some dependencies might not install.
+> **Note** 
+> This server is hosted on Heroku which uses a linux system to host the servers. So, if you are using a windows system, some dependencies might not install.
 
 ## Running the server
 To run the server, run the following command:
@@ -39,5 +39,5 @@ heroku local
 ## Accessing the Server
 Once the server is up and running it will be hosted locally on ``localhost:8000`` or on ``localhost:5000`` if you are using heroku local.
 
-**Note**
-if you want to access all of the endpoints, you will probably need an application like postman since the browsers can only make GET requests.
+> **Note**
+> if you want to access all of the endpoints, you will probably need an application like postman since the browsers can only make GET requests.
