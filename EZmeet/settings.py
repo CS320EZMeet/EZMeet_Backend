@@ -85,10 +85,10 @@ WSGI_APPLICATION = 'EZmeet.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd9ca68j25f19fa',
-        'USER' : 'ehrrwfxmrtagrn',
-        'PASSWORD' : 'd82b3292ade726caeb6250c3379b41835b0cd6c78f73e273f865d3f76c0d24f8',
-        'HOST' : 'ec2-54-82-205-3.compute-1.amazonaws.com',
+        'NAME': 'da6advjnccg0i9',
+        'USER' : 'wooqnaofpwcsal',
+        'PASSWORD' : '6782bd5e26c23083f62d1d565ecc908aaa76d386df202dd756cc430a5e5237fb',
+        'HOST' : 'ec2-54-87-249-251.compute-1.amazonaws.com',
         'PORT' : '5432',
 
     }

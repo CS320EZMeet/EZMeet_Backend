@@ -3,5 +3,5 @@ from django.urls import include, path
 from accountProfile import views
 
 urlpatterns = [
-    path('', views.get),
+    path('<str:userName>', views.get),
 ]
