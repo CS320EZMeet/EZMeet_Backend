@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
-
+import env
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -84,12 +84,12 @@ WSGI_APPLICATION = 'EZmeet.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'da6advjnccg0i9',
-        'USER' : 'wooqnaofpwcsal',
-        'PASSWORD' : '6782bd5e26c23083f62d1d565ecc908aaa76d386df202dd756cc430a5e5237fb',
-        'HOST' : 'ec2-54-87-249-251.compute-1.amazonaws.com',
-        'PORT' : '5432',
+        'ENGINE': env.ENGINE,
+        'NAME': env.NAME,
+        'USER' : env.USER,
+        'PASSWORD' : env.PASSWORD,
+        'HOST' : env.HOST,
+        'PORT' : env.PORT,
 
     }
 }
