@@ -6,5 +6,5 @@ from . import views
 ### local:8000/findMidpoint/
 urlpatterns = [
     path('', views.index),
-    path('/<str:groupId>', views.calcMidpoint)
+    path('<int:groupID>/', views.getMidpoint)
 ]
