@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-8ycr0ydh(k$c%3b1(j9@=4r_(u8y@pd#9e=1yx*8qh$$yvtolv
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['ezmeet2022.herokuapp.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['ezmeet2022.herokuapp.com', '127.0.0.1', 'localhost', 'localhost:3000']
 
 
 # Application definition
@@ -139,3 +139,10 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:3000',  # for localhost (REACT Default)
+    'http://192.168.0.50:3000',  # for network 
+    'http://localhost:8080',  # for localhost (Developlemt)
+    'http://192.168.0.50:8080',  # for network (Development)
+)
