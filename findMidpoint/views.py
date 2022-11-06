@@ -31,6 +31,9 @@ def showMidpoint(request, group):
 
     return [sumX / length, sumY / length]
 
+def calcMidpoint(request, group):
+    return HttpResponse(showMidpoint(request, group))
+
 def createRecommendationList(request):
     return
 
