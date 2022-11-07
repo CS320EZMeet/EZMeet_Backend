@@ -13,7 +13,7 @@ def findUser(userName):
             columns = [desc[0] for desc in cursor.description]
             real_dict = [dict(zip(columns, row)) for row in cursor.fetchall()]
     if len(real_dict) != 0:
-        return real_dict[0]
+        return real_dict
     else:
         return None
 
