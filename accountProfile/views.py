@@ -13,7 +13,7 @@ from django.contrib.auth.models import User
 def index(request):
     return HttpResponse("Welcome page to Account profile")
 
-# A possible template for creating a user from front-end form, and placing in DB
+# A possible template for creating a user from front-end form, and placing in DB (For ALPHA release)
 def registerUser(request, user):
     if request.method == 'PUT':
         if findUser(user.username):
@@ -31,17 +31,21 @@ def registerUser(request, user):
 
 @csrf_exempt
 def login(request, userName):
-    if request.method == 'POST':
-        user = findUser(userName)
-        if user is not None:
-            #if user.password == password:
-            return JsonResponse(data = {'status': 200, 'success': True, 'data': user, 'message': 'Logged-in.'}, status = 200)
-            #else:
-                #return JsonResponse(data = {'status': 401, 'success': False, 'message': 'Incorrect Password Entered. Please try again.'}, status = 200)
+    try:
+        if request.method == 'POST':
+            user = findUser(userName)
+            if user is not None:
+                #if user.password == password:
+                return JsonResponse(data = {'status': 200, 'success': True, 'data': user, 'message': 'Logged-in.'}, status = 200)
+                #else:
+                    #return JsonResponse(data = {'status': 401, 'success': False, 'message': 'Incorrect Password Entered. Please try again.'}, status = 200)
+            else:
+                return JsonResponse(data = {'status': 200, 'success': False, 'message': 'That account doesn\'t exist. Create a new account.'}, status = 200)
         else:
-            return JsonResponse(data = {'status': 200, 'success': False, 'message': 'That account doesn\'t exist. Create a new account.'}, status = 200)
-    else:
-        return JsonResponse(data = {'status': 405,'success': False, 'message': 'This endpoint only supports POST requests.'}, status = 405)
+            return JsonResponse(data = {'status': 405,'success': False, 'message': 'This endpoint only supports POST requests.'}, status = 405)
+    except Exception as e:
+        print(e)
+        return JsonResponse(data = {'status': 500,'success': False, 'message': 'Internal Server Error.'}, status = 500)
 
 #does user want to make their location be private/public?
 def showLocation(request):
@@ -51,7 +55,7 @@ def showLocation(request):
 def preferences(request):
     return
 
-#name, addresses, profile pic?, gender, age?
+#Sample endpoint to get used to Django
 @csrf_exempt
 def get(request, userName):
     if request.method == 'GET':
