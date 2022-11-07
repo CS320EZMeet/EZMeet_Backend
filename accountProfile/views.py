@@ -29,6 +29,7 @@ def registerUser(request, user):
     else:
         return JsonResponse(data = {'status': 405,'success': False, 'message': 'This endpoint only supports PUT requests.'}, status = 405)
 
+@csrf_exempt
 def login(request, userName):
     if request.method == 'POST':
         user = findUser(userName)
@@ -38,7 +39,7 @@ def login(request, userName):
             #else:
                 #return JsonResponse(data = {'status': 401, 'success': False, 'message': 'Incorrect Password Entered. Please try again.'}, status = 200)
         else:
-            return JsonResponse(data = {'status': 401, 'success': False, 'message': 'That account doesn\'t exist. Create a new account.'}, status = 401)
+            return JsonResponse(data = {'status': 200, 'success': False, 'message': 'That account doesn\'t exist. Create a new account.'}, status = 200)
     else:
         return JsonResponse(data = {'status': 405,'success': False, 'message': 'This endpoint only supports POST requests.'}, status = 405)
 
