@@ -2,12 +2,11 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import findUser, createUser
+# Modules we may implement:
 # import simplejson as json
-from django.contrib.auth.models import User
-#from rest_framework import viewsets
-#from .serializers import UserSerializer
-
-# Create your views here.
+# from django.contrib.auth.models import User
+# from rest_framework import viewsets
+# from .serializers import UserSerializer
 
 #welcome page
 def index(request):
@@ -19,6 +18,7 @@ def registerUser(request, user):
         if findUser(user.username):
             return JsonResponse(data = {'status': 409, 'success': False, 'message': 'That username is taken. Please try another.'}, status = 409)
         else:
+            # Unclear if this will be used
             # django_user = User.objects.create_user(
             #     username=userObj.username,
             #     email=userObj.email,
@@ -29,6 +29,7 @@ def registerUser(request, user):
     else:
         return JsonResponse(data = {'status': 405,'success': False, 'message': 'This endpoint only supports PUT requests.'}, status = 405)
 
+# Password will be properly verified in final release
 @csrf_exempt
 def login(request, userName):
     try:

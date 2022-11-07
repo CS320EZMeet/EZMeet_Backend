@@ -17,7 +17,6 @@ def findUser(userName):
     else:
         return None
 
-# Largely copy-pasted from above; lmk or feel free to change if part of it doesn't make sense
 def createUser(user):
     with psycopg2.connect(user=env.USER, 
                           password=env.PASSWORD, 
