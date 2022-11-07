@@ -26,7 +26,7 @@ def group(request, userName):
     if request.method == 'GET':
         groupID = userToGroupID(userName)
         if groupID == 'Null':
-            return JsonResponse(data = {"status": 404, 'success': False, 'data': None, 'message': 'User not in a group'}, status = 404)
+            return JsonResponse(data = {"status": 200, 'success': False, 'data': None, 'message': 'User not in a group'}, status = 200)
         elif groupID == None:
             return JsonResponse(data = {"status": 403, 'success': False, 'data': None, 'message': 'User not found'}, status = 403)
         else:
@@ -52,7 +52,7 @@ def group(request, userName):
             else:
                 return JsonResponse(data = {"status": 200, 'success': True, 'data': {'group_id': groupID}, 'message': 'new group successfully formed'}, status = 200)
         else:
-            return JsonResponse(data = {"status": 404, 'success': False, 'data': None, 'message': 'User already in a group'}, status = 404)
+            return JsonResponse(data = {"status": 200, 'success': False, 'data': None, 'message': 'User already in a group'}, status = 200)
     else:    
         return JsonResponse(data = {'status': 405,'success': False, 'message': 'This endpoint only supports GET and POST requests.'}, status = 405)
     
@@ -75,7 +75,7 @@ def groupJoin(request, groupID):
             if users == None:
                 return JsonResponse(data = {"status": 404, 'success': False, 'data': None, 'message': 'Group not found'}, status = 404)
             elif len(users) == 5:
-                return JsonResponse(data = {"status": 404, 'success': False, 'data': None, 'message': 'Group is full'}, status = 404)
+                return JsonResponse(data = {"status": 200, 'success': False, 'data': None, 'message': 'Group is full'}, status = 200)
             else:
                 success = updateUserGroup(userName, groupID)
                 if success == None:
@@ -88,7 +88,7 @@ def groupJoin(request, groupID):
                     else:
                         return JsonResponse(data = {"status": 200, 'success': True, 'data': {'group_id': groupID}, 'message': 'User successfully joined group'}, status = 200)
         else:
-            return JsonResponse(data = {"status": 404, 'success': False, 'data': None, 'message': 'User already in a group'}, status = 404)
+            return JsonResponse(data = {"status": 200, 'success': False, 'data': None, 'message': 'User already in a group'}, status = 200)
     else:    
         return JsonResponse(data = {'status': 405,'success': False, 'message': 'This endpoint only supports POST requests.'}, status = 405)
 
