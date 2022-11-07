@@ -29,7 +29,6 @@ def registerUser(request, user):
     else:
         return JsonResponse(data = {'status': 405,'success': False, 'message': 'This endpoint only supports PUT requests.'}, status = 405)
 
-# Should have login functionality, like createUser for sign-up
 def login(request, username, password):
     if request.method == 'POST':
         user = findUser(username)
