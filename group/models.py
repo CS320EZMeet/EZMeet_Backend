@@ -96,10 +96,10 @@ def updateGroup(userName, groupID, userNum):
                           port=env.PORT, 
                           database=env.NAME) as connection:
         with connection.cursor() as cursor:
-            cursor.execute(f"UPDATE \"ezmeet-schema\".users SET User{userNum} = {userName} WHERE group_id = \'{groupID}\' RETURNING User{userNum};")
-            rows = cursor.fetchall()
+            cursor.execute(f"UPDATE \"ezmeet-schema\".group SET User{userNum} = \'{userName}\' WHERE group_id = \'{groupID}\';")
+            rowCount = cursor.rowcount
         connection.commit()
-    if len(rows) != 0:
+    if rowCount == 1:
         return 'Success'
     else:
         return None
@@ -126,7 +126,22 @@ def removeUserFromGroup(groupID, userNum):
                           port=env.PORT, 
                           database=env.NAME) as connection:
         with connection.cursor() as cursor:
-            cursor.execute(f"UPDATE \"ezmeet-schema\".users SET User{userNum} = NULL WHERE WHERE group_id = \'{groupID}\' RETURNING User{userNum};")    #propograte the Null to the next users
+            cursor.execute(f"UPDATE \"ezmeet-schema\".group SET User{userNum} = NULL WHERE group_id = \'{groupID}\';")    #propograte the Null to the next users
+            rowCount = cursor.rowcount
+        connection.commit()
+    if rowCount == 1:
+        return 'Success'
+    else:
+        return None
+
+def removeGroupFromUser(userName):
+    with psycopg2.connect(user=env.USER, 
+                          password=env.PASSWORD, 
+                          host=env.HOST, 
+                          port=env.PORT, 
+                          database=env.NAME) as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(f"UPDATE \"ezmeet-schema\".users SET group_id = NULL WHERE username = \'{userName}\';")
             rowCount = cursor.rowcount
         connection.commit()
     if rowCount == 1:
