@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import userToGroupID, groupUsers, userLocations, createNewGroup, updateUserGroup
+from .models import *
+import json
 
 # Create your views here.
 
@@ -55,5 +56,70 @@ def group(request, userName):
     else:    
         return JsonResponse(data = {'status': 405,'success': False, 'message': 'This endpoint only supports GET and POST requests.'}, status = 405)
     
-# @csrf_exempt
-# def groupJoin(request, userName):
+@csrf_exempt
+def groupJoin(request, groupID):
+    if request.method == 'POST':
+        body = request.body
+        if body:
+            body = json.loads(body)
+            userName = body['userName']
+            if userName == None:
+                return JsonResponse(data = {'status': 400,'success': False, 'message': 'userName not specified in body'}, status = 400)
+        groupID = userToGroupID(userName)
+        if groupID == None:
+            return JsonResponse(data = {"status": 403, 'success': False, 'data': None, 'message': 'User not found'}, status = 403)
+        elif groupID == 'Null':
+            users = groupUsers(groupID)
+            if users == None:
+                return JsonResponse(data = {"status": 404, 'success': False, 'data': None, 'message': 'Group not found'}, status = 404)
+            elif len(users) == 5:
+                return JsonResponse(data = {"status": 404, 'success': False, 'data': None, 'message': 'Group is full'}, status = 404)
+            else:
+                sucess = updateUserGroup(userName, groupID)
+                if sucess == None:
+                    return JsonResponse(data = {"status": 500, 'success': False, 'data': None, 'message': 'Error updating groupID in users'}, status = 500)
+                else:
+                    userNum = len(users)+1
+                    sucess = updateGroup(userName, groupID, userNum)
+                    if sucess == None:
+                        return JsonResponse(data = {"status": 500, 'success': False, 'data': None, 'message': 'Error updating user in group'}, status = 500)
+                    else:
+                        return JsonResponse(data = {"status": 200, 'success': True, 'data': {'group_id': groupID}, 'message': 'User successfully joined group'}, status = 200)
+        else:
+            return JsonResponse(data = {"status": 404, 'success': False, 'data': None, 'message': 'User already in a group'}, status = 404)
+    else:    
+        return JsonResponse(data = {'status': 405,'success': False, 'message': 'This endpoint only supports POST requests.'}, status = 405)
+
+@csrf_exempt
+def groupLeave(request, groupID, userName):
+    if request.method == 'POST':
+        groupID = userToGroupID(userName)
+        if groupID == None:
+            return JsonResponse(data = {"status": 403, 'success': False, 'data': None, 'message': 'User not found'}, status = 403)
+        elif groupID == 'Null':
+            users = groupUsers(groupID)
+            if users == None:
+                return JsonResponse(data = {"status": 404, 'success': False, 'data': None, 'message': 'Group not found'}, status = 404)
+            elif len(users) == 1:
+                success = deleteGroup(groupID)
+                if success == None:
+                    return JsonResponse(data = {"status": 500, 'success': False, 'data': None, 'message': 'Error deleting group'}, status = 500)
+                else:
+                    return JsonResponse(data = {"status": 200, 'success': True, 'data': {'group_id': groupID}, 'message': 'Last user from the group removed and group deleted'}, status = 200)
+            else:
+                userNum = None
+                for i in range(len(users)):
+                    if users[i] == userName:
+                        userNum = i+1
+                if userNum == None:
+                    return JsonResponse(data = {"status": 404, 'success': False, 'data': None, 'message': 'User not found in group'}, status = 404)
+                else:
+                    sucess = removeUserFromGroup(userName, groupID, userNum)
+                    if sucess == None:
+                        return JsonResponse(data = {"status": 500, 'success': False, 'data': None, 'message': 'Error removing user from group'}, status = 500)
+                    else:
+                        return JsonResponse(data = {"status": 200, 'success': True, 'data': {'group_id': groupID}, 'message': 'User successfully removed from group'}, status = 200)
+        else:
+            return JsonResponse(data = {"status": 404, 'success': False, 'data': None, 'message': 'User already in a group'}, status = 404)
+    else:    
+        return JsonResponse(data = {'status': 405,'success': False, 'message': 'This endpoint only supports POST requests.'}, status = 405)

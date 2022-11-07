@@ -88,3 +88,48 @@ def updateUserGroup(userName, groupID):
         return 'Success'
     else:
         return None
+
+def updateGroup(userName, groupID, userNum):
+    with psycopg2.connect(user=env.USER, 
+                          password=env.PASSWORD, 
+                          host=env.HOST, 
+                          port=env.PORT, 
+                          database=env.NAME) as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(f"UPDATE \"ezmeet-schema\".users SET User{userNum} = {userName} WHERE group_id = \'{groupID}\' RETURNING User{userNum};")
+            rows = cursor.fetchall()
+        connection.commit()
+    if len(rows) != 0:
+        return 'Success'
+    else:
+        return None
+
+def deleteGroup(groupID):
+    with psycopg2.connect(user=env.USER, 
+                          password=env.PASSWORD, 
+                          host=env.HOST, 
+                          port=env.PORT, 
+                          database=env.NAME) as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(f"DELETE FROM \"ezmeet-schema\".group WHERE group_id = \'{groupID}\';")
+            rowCount = cursor.rowcount
+        connection.commit()
+    if rowCount == 1:
+        return 'Success'
+    else:
+        return None
+
+def removeUserFromGroup(groupID, userNum):
+    with psycopg2.connect(user=env.USER, 
+                          password=env.PASSWORD, 
+                          host=env.HOST, 
+                          port=env.PORT, 
+                          database=env.NAME) as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(f"UPDATE \"ezmeet-schema\".users SET User{userNum} = NULL WHERE WHERE group_id = \'{groupID}\' RETURNING User{userNum};")    #propograte the Null to the next users
+            rowCount = cursor.rowcount
+        connection.commit()
+    if rowCount == 1:
+        return 'Success'
+    else:
+        return None
