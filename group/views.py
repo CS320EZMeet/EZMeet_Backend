@@ -67,7 +67,7 @@ def groupJoin(request, groupID):
             body = request.body
             if body:
                 body = json.loads(body)
-                userName = body['userName']
+                userName = body.get('userName')
                 if userName == None:
                     return JsonResponse(data = {'status': 400,'success': False, 'message': 'userName not specified in body'}, status = 400)
             else:
@@ -98,7 +98,7 @@ def groupJoin(request, groupID):
             return JsonResponse(data = {'status': 405,'success': False, 'message': 'This endpoint only supports POST requests.'}, status = 405)
     except Exception as e:
         print(e)
-        return JsonResponse(data = {'status': 500,'success': False, 'message': 'Internal Server Error.'}, status = 500)
+        return JsonResponse(data = {'status': 500,'success': False, 'message': e.__str__}, status = 500)
 
 @csrf_exempt
 def groupLeave(request, groupID):
@@ -107,7 +107,7 @@ def groupLeave(request, groupID):
             body = request.body
             if body:
                 body = json.loads(body)
-                userName = body['userName']
+                userName = body.get('userName')
                 if userName == None:
                     return JsonResponse(data = {'status': 400,'success': False, 'message': 'userName not specified in body'}, status = 400)
             else:
