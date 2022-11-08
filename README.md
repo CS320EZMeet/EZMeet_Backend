@@ -36,6 +36,12 @@ Or if you have heroku installed, you can also emulate the heroku server by runni
 heroku local
 ```
 
+## Running Tests
+The repo comes with a test suite to test the server. To run the tests, run the following command:
+```
+python manage.py test
+```
+
 ## Accessing the Server
 Once the server is up and running it will be hosted locally on ``localhost:8000`` or on ``localhost:5000`` if you are using heroku local.
 
