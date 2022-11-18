@@ -6,9 +6,9 @@ class accountProfileView(SimpleTestCase):
         response = self.client.get('/user/get/Yeet/')
         self.assertEqual(response.status_code, 200)
         content = json.loads(response.content)
-        user = content['data'][0]['username']
+        user = content['data']['username']
         self.assertEqual(user,'Yeet')
-        email = content['data'][0]['email']
+        email = content['data']['email']
         self.assertEqual(email,'yeet@yahoo.com')
 
     def test_login_success(self):
@@ -17,7 +17,7 @@ class accountProfileView(SimpleTestCase):
         content = json.loads(response.content)
         success = content['success']
         self.assertEqual(success, True)
-        userName = content['data'][0]['username']
+        userName = content['data']['username']
         self.assertEqual(userName, 'Yeet')
     
     def test_login_incorrect_username(self):
