@@ -25,8 +25,8 @@ def createUser(user):
                           port=env.PORT, 
                           database=env.NAME) as connection:
         with connection.cursor() as cursor:
-            cursor.execute("INSERT INTO users (Username, Password, Email, Group_id)) VALUES (%s, %s, %s, %s)",
-                           (user.name, user.password, user.email, user.groupId))
+            cursor.execute("INSERT INTO \"ezmeet-schema\".users (Username, Password, Email)) VALUES (%s, %s, %s)",
+                           (user.userName, user.password, user.email))
             columns = [desc[0] for desc in cursor.description]
             real_dict = [dict(zip(columns, row)) for row in cursor.fetchall()]
     if len(real_dict) != 0:
