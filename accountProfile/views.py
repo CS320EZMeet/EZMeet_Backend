@@ -26,7 +26,7 @@ def registerUser(request, user):
 # Update some user details
 def updateUser(request, user):
     return
-
+    
 # Password will be properly verified in final release
 @csrf_exempt
 def login(request, userName):
