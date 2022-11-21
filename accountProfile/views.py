@@ -13,9 +13,11 @@ def index(request):
     return HttpResponse("Welcome page to Account profile")
 
 # A possible template for creating a user from front-end form, and placing in DB (For ALPHA release)
-def registerUser(request, user):
+def registerUser(request, userName):
     if request.method == 'POST':
-        if findUser(user.username):
+        body = request.body
+        user = {'userName': userName, 'email': body.email, 'password': body.password}
+        if findUser(userName):
             return JsonResponse(data = {'status': 409, 'success': False, 'message': 'That username is taken. Please try another.'}, status = 409)
         else:
             createUser(user)
@@ -32,12 +34,15 @@ def updateUser(request, user):
 def login(request, userName):
     try:
         if request.method == 'POST':
+            password = request.body.password
+            if password is None or password == '':
+                return JsonResponse(data = {'status': 401, 'success': False, 'message': 'No password received.'}, status = 401)
             user = findUser(userName)
             if user is not None:
-                #if user.password == password:
-                return JsonResponse(data = {'status': 200, 'success': True, 'data': user, 'message': 'Logged-in.'}, status = 200)
-                #else:
-                    #return JsonResponse(data = {'status': 401, 'success': False, 'message': 'Incorrect Password Entered. Please try again.'}, status = 200)
+                if user.password == password:
+                    return JsonResponse(data = {'status': 200, 'success': True, 'data': user, 'message': 'Logged-in.'}, status = 200)
+                else:
+                    return JsonResponse(data = {'status': 401, 'success': False, 'message': 'Incorrect Password Entered. Please try again.'}, status = 200)
             else:
                 return JsonResponse(data = {'status': 200, 'success': False, 'message': 'That account doesn\'t exist. Create a new account.'}, status = 200)
         else:
