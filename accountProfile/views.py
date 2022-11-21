@@ -14,21 +14,19 @@ def index(request):
 
 # A possible template for creating a user from front-end form, and placing in DB (For ALPHA release)
 def registerUser(request, user):
-    if request.method == 'PUT':
+    if request.method == 'POST':
         if findUser(user.username):
             return JsonResponse(data = {'status': 409, 'success': False, 'message': 'That username is taken. Please try another.'}, status = 409)
         else:
-            # Unclear if this will be used
-            # django_user = User.objects.create_user(
-            #     username=userObj.username,
-            #     email=userObj.email,
-            #     password=userObj.password
-            # )
             createUser(user)
             return JsonResponse(data = {'status': 200,'success': True, 'data': user, 'message': 'User created.'}, status = 200)
     else:
         return JsonResponse(data = {'status': 405,'success': False, 'message': 'This endpoint only supports PUT requests.'}, status = 405)
 
+# Update some user details
+def updateUser(request, user):
+    return
+    
 # Password will be properly verified in final release
 @csrf_exempt
 def login(request, userName):
@@ -50,6 +48,14 @@ def login(request, userName):
 
 #does user want to make their location be private/public?
 def showLocation(request):
+    return
+
+# Get user's location
+def getLocation(request, userName):
+    return
+
+# Set user's proxy location
+def setLocation(request, userName):
     return
 
 #user's preference list of activities they want to do

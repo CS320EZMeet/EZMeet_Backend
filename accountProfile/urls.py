@@ -5,4 +5,5 @@ from accountProfile import views
 urlpatterns = [
     path('get/<str:userName>/', views.get),
     path('login/<str:userName>/', views.login),
+    path('register/<str:userName>', views.registerUser),
 ]
