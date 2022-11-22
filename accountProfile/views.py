@@ -24,7 +24,10 @@ def registerUser(request, user):
         return JsonResponse(data = {'status': 405,'success': False, 'message': 'This endpoint only supports PUT requests.'}, status = 405)
 
 # Update some user details
-def updateUser(request, user):
+def updateUser(request, userName):
+    body = request.body
+    user = findUser(userName)
+
     return
     
 # Password will be properly verified in final release
@@ -47,16 +50,16 @@ def login(request, userName):
         return JsonResponse(data = {'status': 500,'success': False, 'message': 'Internal Server Error.'}, status = 500)
 
 #does user want to make their location be private/public?
-def showLocation(request):
+def showLocation(request, userName):
     return
 
 # Get user's location
 def getLocation(request, userName):
-    return
+    return userLocation(userName)
 
 # Set user's proxy location
 def setLocation(request, userName):
-    return
+    return updateField(Location, request.body.location)
 
 #user's preference list of activities they want to do
 def preferences(request):
