@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import findUser, createUser
+from .models import *
 # Modules we may implement:
 # import simplejson as json
 # from django.contrib.auth.models import User
@@ -13,34 +13,49 @@ def index(request):
     return HttpResponse("Welcome page to Account profile")
 
 # A possible template for creating a user from front-end form, and placing in DB (For ALPHA release)
-def registerUser(request, user):
+def registerUser(request, userName):
     if request.method == 'POST':
-        if findUser(user.username):
-            return JsonResponse(data = {'status': 409, 'success': False, 'message': 'That username is taken. Please try another.'}, status = 409)
-        else:
+        body = request.body
+        user = {'userName': userName, 'email': body.email, 'password': body.password}
+        if findUser(userName) is None:
             createUser(user)
             return JsonResponse(data = {'status': 200,'success': True, 'data': user, 'message': 'User created.'}, status = 200)
+        else:
+            return JsonResponse(data = {'status': 409, 'success': False, 'message': 'That username is taken. Please try another.'}, status = 409)
     else:
         return JsonResponse(data = {'status': 405,'success': False, 'message': 'This endpoint only supports PUT requests.'}, status = 405)
 
-# Update some user details
-def updateUser(request, userName):
-    body = request.body
-    user = findUser(userName)
+# Update some user details; Need more implementation info before completing
+def updateUser(request):
+    if request.method == 'PUT':
+        body = request.body
+        if body is None or body.user is None:
+            return JsonResponse(data = {'status': 401, 'success': False, 'message': 'Missing necessary data to complete request.'}, status = 401)
+        
+        user = body.user    
+        if findUser(user.userName) is None:
+            return JsonResponse(data = {'status': 200, 'success': False, 'message': 'That account doesn\'t exist.'}, status = 200)
+        
+        newUser = updateFields(user)
 
-    return
+        return JsonResponse(data = {'status': 200, 'success': True, 'data': newUser, 'message': 'User updated.'}, status = 200)
+    else:
+        return JsonResponse(data = {'status': 405,'success': False, 'message': 'This endpoint only supports PUT requests.'}, status = 405)
     
 # Password will be properly verified in final release
 @csrf_exempt
 def login(request, userName):
     try:
         if request.method == 'POST':
+            password = request.body.password
+            if password is None or password == '':
+                return JsonResponse(data = {'status': 401, 'success': False, 'message': 'No password received.'}, status = 401)
             user = findUser(userName)
             if user is not None:
-                #if user.password == password:
-                return JsonResponse(data = {'status': 200, 'success': True, 'data': user, 'message': 'Logged-in.'}, status = 200)
-                #else:
-                    #return JsonResponse(data = {'status': 401, 'success': False, 'message': 'Incorrect Password Entered. Please try again.'}, status = 200)
+                if user.password == password:
+                    return JsonResponse(data = {'status': 200, 'success': True, 'data': user, 'message': 'Logged-in.'}, status = 200)
+                else:
+                    return JsonResponse(data = {'status': 401, 'success': False, 'message': 'Incorrect Password Entered. Please try again.'}, status = 200)
             else:
                 return JsonResponse(data = {'status': 200, 'success': False, 'message': 'That account doesn\'t exist. Create a new account.'}, status = 200)
         else:
@@ -49,21 +64,30 @@ def login(request, userName):
         print(e)
         return JsonResponse(data = {'status': 500,'success': False, 'message': 'Internal Server Error.'}, status = 500)
 
-#does user want to make their location be private/public?
-def showLocation(request, userName):
-    return
-
 # Get user's location
 def getLocation(request, userName):
-    return userLocation(userName)
+    loc = findLocation(userName)
+    if loc is None:
+        return JsonResponse(data = {'status': 200, 'success': False, 'message': 'That account doesn\'t exist.'}, status = 200)
+    else:
+        return JsonResponse(data = {'status': 200, 'success': True, 'data': loc, 'message': 'Location fetched.'}, status = 200)
 
 # Set user's proxy location
 def setLocation(request, userName):
-    return updateField(Location, request.body.location)
+    body = request.body
+    user = updateLocation(userName, body.latitude, body.longitude)
+    if user is None:
+        return JsonResponse(data = {'status': 200, 'success': False, 'message': 'That account doesn\'t exist.'}, status = 200)
+    else:
+        return JsonResponse(data = {'status': 200, 'success': True, 'data': user, 'message': 'Preferences fetched.'}, status = 200)
 
 #user's preference list of activities they want to do
-def preferences(request):
-    return
+def preferences(request, userName):
+    user = findUser(userName)
+    if user is None:
+        return JsonResponse(data = {'status': 200, 'success': False, 'message': 'That account doesn\'t exist.'}, status = 200)
+    else:
+        return JsonResponse(data = {'status': 200, 'success': True, 'data': user['Preferences'], 'message': 'Preferences fetched.'}, status = 200)
 
 #Sample endpoint to get used to Django
 @csrf_exempt

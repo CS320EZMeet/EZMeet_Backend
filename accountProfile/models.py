@@ -24,8 +24,20 @@ def createUser(user):
                           port=env.PORT, 
                           database=env.NAME) as connection:
         with connection.cursor() as cursor:
-            cursor.execute("INSERT INTO \"ezmeet-schema\".users (Username, Password, Email)) VALUES (%s, %s, %s)",
-                           (user.userName, user.password, user.email))
+            cursor.execute("INSERT INTO \"ezmeet-schema\".users (Username, Password, Email) VALUES (%s, %s, %s)",
+                           (user['userName'], user['password'], user['email']))
+    return user
+
+def updateFields(user):
+    with psycopg2.connect(user=env.USER, 
+                          password=env.PASSWORD, 
+                          host=env.HOST, 
+                          port=env.PORT, 
+                          database=env.NAME) as connection:
+        with connection.cursor() as cursor:
+            userName = user.userName
+            for field in user.keys():
+                cursor.execute("UPDATE \"ezmeet-schema\".users %s = %s WHERE Username = %s", (field, user['field'], userName))
             columns = [desc[0] for desc in cursor.description]
             real_dict = [dict(zip(columns, row)) for row in cursor.fetchall()]
     if len(real_dict) != 0:
@@ -33,14 +45,14 @@ def createUser(user):
     else:
         return None
 
-def userLocation(userName):
+def findLocation(userName):
     with psycopg2.connect(user=env.USER, 
                           password=env.PASSWORD, 
                           host=env.HOST, 
                           port=env.PORT, 
                           database=env.NAME) as connection:
         with connection.cursor() as cursor:
-            cursor.execute("SELECT location FROM \"ezmeet-schema\".user_locations WHERE Username = %s", (userName,))
+            cursor.execute("SELECT latitude, longitude FROM \"ezmeet-schema\".user_locations WHERE Username = %s", (userName,))
             columns = [desc[0] for desc in cursor.description]
             real_dict = [dict(zip(columns, row)) for row in cursor.fetchall()]
     if len(real_dict) != 0:
@@ -48,17 +60,14 @@ def userLocation(userName):
     else:
         return None
 
-def updateField(userName, field, value):
+def updateLocation(userName, latitude, longitude):
     with psycopg2.connect(user=env.USER, 
                           password=env.PASSWORD, 
                           host=env.HOST, 
                           port=env.PORT, 
                           database=env.NAME) as connection:
         with connection.cursor() as cursor:
-            if field == 'Location':
-                cursor.execute("UPDATE \"ezmeet-schema\".user_locations SET latitude = value.latitude, longitude = value.longitude WHERE Username = %s", (userName,))
-            else:
-                cursor.execute("UPDATE \"ezmeet-schema\".users %s = %s WHERE Username = userName", (field, value))
+            cursor.execute("UPDATE \"ezmeet-schema\".user_locations SET latitude = %s, longitude = %s WHERE Username = %s", (latitude, longitude, userName))
             columns = [desc[0] for desc in cursor.description]
             real_dict = [dict(zip(columns, row)) for row in cursor.fetchall()]
     if len(real_dict) != 0:
