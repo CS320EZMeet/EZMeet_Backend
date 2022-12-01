@@ -147,7 +147,3 @@ CORS_ORIGIN_WHITELIST = (
     'http://192.168.0.50:8080',  # for network (Development)
     'http://0.0.0.0:5000',  # for network (Development)
 )
-
-CORS_ALLOWED_ORIGIN_REGEXES = (
-    r'http://localhost:3000/user/get/[A-Za-z0-9]+'
-)

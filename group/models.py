@@ -126,8 +126,11 @@ def removeUserFromGroup(groupID, userNum):
                           port=env.PORT, 
                           database=env.NAME) as connection:
         with connection.cursor() as cursor:
-            cursor.execute(f"UPDATE \"ezmeet-schema\".group SET User{userNum} = NULL WHERE group_id = \'{groupID}\';")    #propograte the Null to the next users
-            rowCount = cursor.rowcount
+            while(userNum != 5):
+                cursor.execute(f"UPDATE \"ezmeet-schema\".group SET User{userNum} = User{userNum+1} WHERE group_id = \'{groupID}\';")    #propograte the Null to the next users
+                rowCount = cursor.rowcount
+                userNum += 1
+            cursor.execute(f"UPDATE \"ezmeet-schema\".group SET User{userNum} = NULL WHERE group_id = \'{groupID}\';")
         connection.commit()
     if rowCount == 1:
         return 'Success'
