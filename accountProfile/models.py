@@ -17,6 +17,7 @@ def findUser(userName):
     if len(real_dict) != 0:
         res = real_dict[0]
         res['preferences'] = generatePreferenceList(prefID)
+        return res
     else:
         return None
 
