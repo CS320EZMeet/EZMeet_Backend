@@ -34,14 +34,15 @@ def getMidpoint(request, groupID):
                     return JsonResponse(data = {"status": 404, 'success': False, 'data': None, 'message': 'User\'s location is not set; cannot calculate places without user\'s location'}, status = 404)
                 else:
                     midpoint = calcMidpoint(locations)
-                    #list of prefIDs
+                    print(midpoint)
+                    # list of prefIDs
                     preferences = userPreferences(users)
                     if preferences == None or len(preferences) == 0:
                         return JsonResponse(data = {"status": 404, 'success': False, 'data': None, 'message': 'User Preference not found'}, status = 404)
                     else:
                         types = findCommonPreferences(preferences)
-                        locations = createRecommendationList(midpoint, types['data'])
-                        return JsonResponse(data = {"status": 200, 'success': True, 'data': locations, 'message': 'List of Places Generated'}, status = 200)
+                        locations = createRecommendationList(midpoint, types)
+                    return JsonResponse(data = {"status": 200, 'success': True, 'data': locations, 'message': 'List of Places Generated'}, status = 200)
         else:    
             return JsonResponse(data = {'status': 405,'success': False, 'message': 'This endpoint only supports GET requests.'}, status = 405)
     except Exception as e:
@@ -53,34 +54,27 @@ def column(matrix, i):
     return [row[i] for row in matrix]
 
 def findCommonPreferences(preferences):
-    keys = None
     matrix = defaultdict(int)
     for pref in preferences:
         prefBools = matchPreferenceIDtoBools(pref)
-        if prefBools == None:
-            return JsonResponse(data = {"status": 500, 'success': False, 'data': None, 'message': 'Preference ID does not exist in database'}, status = 500)
-        else:
-            (RestaurantBar, Nature, Museums, Entertainment, Shopping) = prefBools
-            if RestaurantBar:
-                matrix['restaurantBar'] += 1
-            if Nature:
-                matrix['nature'] += 1
-            if Museums:
-                matrix['museum'] +=1
-            if Entertainment:
-                matrix['entertainment'] +=1
-            if Shopping:
-                matrix['shopping'] += 1
-            res = {key: value/len(preferences) for key, value in matrix.items()}
-            maxVal = max(res.values())
-            keys = set([key for key, value in res.items() if value == maxVal])
-    if len(keys) == 0:
-        return JsonResponse(data = {"status": 404, 'success': False, 'data': None, 'message': 'Cannot find common preferences'}, status = 404)           
-    #return all key(s) with the highest value
-    return JsonResponse(data = {'status': 200,'success': True, 'data': keys, 'message': 'Found common preferences'}, status = 200)
-    
+        (RestaurantBar, Nature, Museums, Entertainment, Shopping) = prefBools
+        if RestaurantBar:
+            matrix['restaurantBar'] += 1
+        if Nature:
+            matrix['nature'] += 1
+        if Museums:
+            matrix['museum'] +=1
+        if Entertainment:
+            matrix['entertainment'] +=1
+        if Shopping:
+            matrix['shopping'] += 1
+        res = {key: value/len(preferences) for key, value in matrix.items()}
+        maxVal = max(res.values())
+    keys = set([key for key, value in res.items() if value == maxVal])
+    print(keys)
+    return keys
+
 def createRecommendationList(midpoint, types):
-    try:
         restaurantBar = ["restaurant", "bar", "cafe", "night_club"]
         nature = ["campground", "park"]
         shopping = ["clothing_store", "department_store", "shopping_mall"]
@@ -94,6 +88,7 @@ def createRecommendationList(midpoint, types):
             if t == "restaurantBar":
                 for type in restaurantBar:
                     loc = findPlacesHepler(midpoint, type)
+                    print(loc)
                     locations += loc
                     if len(locations) > 10:
                         break
@@ -101,6 +96,8 @@ def createRecommendationList(midpoint, types):
                 for type in nature:
                     loc = findPlacesHepler(midpoint, type)
                     locations += loc
+                    print(loc)
+
                     if len(locations) > 10:
                         break
             elif t == "shopping": 
@@ -121,13 +118,7 @@ def createRecommendationList(midpoint, types):
                     locations += loc
                     if len(locations) > 10:
                         break
-        if len(locations) == 0:
-            return JsonResponse(data = {"status": 404, 'success': False, 'data': None, 'message': 'No locations found'}, status = 404)
-        else:
-            return JsonResponse(data = {"status": 200, 'success': True, "data": locations, 'message': 'Successfully created recommendation List'}, status = 200)
-    except Exception as e:
-        print(e)
-        return JsonResponse(data = {"status": 500, 'success': False, 'message': 'Internal Server Error'}, status = 500)
+        return locations
 
     
 #will access google places API and return a list of tuples containing the place's fields(name, lat, long, address) based on the lat/long and the type
