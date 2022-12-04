@@ -147,3 +147,5 @@ CORS_ORIGIN_WHITELIST = (
     'http://192.168.0.50:8080',  # for network (Development)
     'http://0.0.0.0:5000',  # for network (Development)
 )
+
+GOOGLE_API_KEY = "AIzaSyBA-N1IiA1FdkGZz-C-s_veSPVvDYu4wII"
