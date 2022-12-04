@@ -37,3 +37,35 @@ def userLocations(users):
                     loc = (rows[1], rows[2])
                     locations.append(loc)
     return locations
+
+def userPreferences(users):
+    preferences = None
+    with psycopg2.connect(user=env.USER, 
+                          password=env.PASSWORD, 
+                          host=env.HOST, 
+                          port=env.PORT, 
+                          database=env.NAME) as connection:
+        with connection.cursor() as cursor:
+            preferences = []
+            for user in users:
+                cursor.execute("SELECT * FROM \"ezmeet-schema\".user_preferences WHERE Username = %s", (user,))
+                rows = cursor.fetchall()
+                if(rows):
+                    rows = rows[0]
+                    pref = rows[1]
+                    preferences.append(pref)
+    return preferences
+
+#takes one preferenceID at a time
+def matchPreferenceIDtoBools(preference):
+    with psycopg2.connect(user=env.USER, 
+                          password=env.PASSWORD, 
+                          host=env.HOST, 
+                          port=env.PORT, 
+                          database=env.NAME) as connection:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM \"ezmeet-schema\".preference_list WHERE pref_id = %s", (preference,))
+            #there should only be one pref_id associated with each possible preference list
+            prefBools = cursor.fetchall()
+    #return the tuple of T/F
+    return prefBools[0][1:6]

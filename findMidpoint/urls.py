@@ -6,5 +6,7 @@ from . import views
 ### local:8000/findMidpoint/
 urlpatterns = [
     path('', views.index),
-    path('<int:groupID>/', views.getMidpoint)
+    path('<int:groupID>/', views.getMidpoint),
+    path('findCommonPreferences/<int:groupID>/', views.findCommonPreferences, name ='commomPref'),
+    path('createRecommendation/<int:groupID>/', views.createRecommendationList, name = 'createRec')
 ]
