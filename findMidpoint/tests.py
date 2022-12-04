@@ -39,26 +39,3 @@ class findMidpointView(SimpleTestCase):
         places = findPlacesHepler(midpoint, "campground")
         self.assertEqual(places, [('Khalsa Camp', 42.4556078, -72.5239966, '189 Long Plain Rd, Leverett, MA 01054, USA')])
 
-    def test_finding_common_preferences(self):
-        #where all users in groups has a preference list
-        response = self.client.get(reverse('commonPref', args=[8]))
-        self.assertEqual(response.status_code, 200)
-        print(response)
-        content =  json.loads(response.content)
-        #broski (28) and bruh(30)
-        self.assertEqual(content['data'], set(['restaurantBar', 'nature', 'museum']))
-
-    def test_finding_common_preferences_where_user_doesnt_have_preference(self):
-        #where all users in groups has a preference list
-        response = self.client.get('midpoint/findCommonPreferences/4/')
-        self.assertEqual(response.status_code, 500)
-        print(response)
-        content =  json.loads(response.content)
-        self.assertEqual(content['message'], "Not all user\'s in the group has their preference list filled out")
-    
-    def test_create_recommendation_list(self):
-        response = self.client.get('midpoint/createRecommendation/8/')
-        self.assertEqual(response.status_code, 200)
-        print(response)
-        content =  json.loads(response.content)
-        self.assertEqual(content['message'], 'Successfully created recommendation List')
