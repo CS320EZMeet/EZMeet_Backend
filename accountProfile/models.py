@@ -62,11 +62,13 @@ def updateFields(user):
                           database=env.NAME) as connection:
         with connection.cursor() as cursor:
             userName = user['userName']
-            for field in ['email', 'password', 'group_id', 'show_location']:
-                query = f"UPDATE \"ezmeet-schema\".users SET {field} = \'{user[field]}\' WHERE Username = \'{userName}\'"
-                cursor.execute(query)
-            id = generatePreferenceID(user['preferences'])
-            cursor.execute("UPDATE \"ezmeet-schema\".user_preferences SET preference_list_id = %d WHERE Username = %s", (id, userName))
+            for field in ['email', 'password', 'show_location']:
+                if user.get(field) is not None:
+                    query = f"UPDATE \"ezmeet-schema\".users SET {field} = \'{user[field]}\' WHERE Username = \'{userName}\'"
+                    cursor.execute(query)
+            if user.get('preferences') is not None:
+                id = generatePreferenceID(user['preferences'])
+                cursor.execute("UPDATE \"ezmeet-schema\".user_preferences SET preference_list_id = %d WHERE Username = %s", (id, userName))
     return findUser(userName)
 
 def findLocation(userName):
