@@ -32,7 +32,7 @@ def registerUser(request, userName):
 
 # Update some user details; Need more implementation info before completing
 @csrf_exempt
-def updateUser(request):
+def updateUser(request, userName):
     if request.method == 'PUT':
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)

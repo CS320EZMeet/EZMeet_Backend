@@ -34,7 +34,6 @@ def getMidpoint(request, groupID):
                     return JsonResponse(data = {"status": 404, 'success': False, 'data': None, 'message': 'User\'s location is not set; cannot calculate places without user\'s location'}, status = 404)
                 else:
                     midpoint = calcMidpoint(locations)
-                    print(midpoint)
                     # list of prefIDs
                     preferences = userPreferences(users)
                     if preferences == None or len(preferences) == 0:
@@ -71,7 +70,6 @@ def findCommonPreferences(preferences):
         res = {key: value/len(preferences) for key, value in matrix.items()}
         maxVal = max(res.values())
     keys = set([key for key, value in res.items() if value == maxVal])
-    print(keys)
     return keys
 
 def createRecommendationList(midpoint, types):
@@ -88,7 +86,6 @@ def createRecommendationList(midpoint, types):
             if t == "restaurantBar":
                 for type in restaurantBar:
                     loc = findPlacesHepler(midpoint, type)
-                    print(loc)
                     locations += loc
                     if len(locations) > 10:
                         break
@@ -96,7 +93,6 @@ def createRecommendationList(midpoint, types):
                 for type in nature:
                     loc = findPlacesHepler(midpoint, type)
                     locations += loc
-                    print(loc)
 
                     if len(locations) > 10:
                         break
