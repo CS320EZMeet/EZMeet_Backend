@@ -13,10 +13,10 @@ def findUser(userName):
             columns = [desc[0] for desc in cursor.description]
             real_dict = [dict(zip(columns, row)) for row in cursor.fetchall()]
             cursor.execute("SELECT Preference_list_id FROM \"ezmeet-schema\".user_preferences WHERE username = %s", (userName,))
-            prefID = cursor.fetchone()[0]
-    if len(real_dict) != 0:
+            prefID = cursor.fetchone()
+    if (len(real_dict) != 0) and (prefID != None):
         res = real_dict[0]
-        res['preferences'] = generatePreferenceList(prefID)
+        res['preferences'] = generatePreferenceList(prefID[0])
         return res
     else:
         return None
