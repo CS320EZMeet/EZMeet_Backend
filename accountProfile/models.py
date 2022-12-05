@@ -61,10 +61,10 @@ def updateFields(user):
                           port=env.PORT, 
                           database=env.NAME) as connection:
         with connection.cursor() as cursor:
-            userName = user.userName
+            userName = user['userName']
             for field in ['email', 'password', 'group_id', 'show_location']:
                 cursor.execute("UPDATE \"ezmeet-schema\".users SET %s = %s WHERE Username = %s", (field, user['field'], userName))
-            id = generatePreferenceID(user.preferences)
+            id = generatePreferenceID(user['preferences'])
             cursor.execute("UPDATE \"ezmeet-schema\".user_preferences SET preference_list_id = %d WHERE Username = %s", (id, userName))
     return findUser(userName)
 
