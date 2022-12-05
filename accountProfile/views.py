@@ -13,6 +13,7 @@ def index(request):
     return HttpResponse("Welcome page to Account profile")
 
 # A possible template for creating a user from front-end form, and placing in DB (For ALPHA release)
+@csrf_exempt
 def registerUser(request, userName):
     if request.method == 'POST':
         body = request.body
@@ -26,6 +27,7 @@ def registerUser(request, userName):
         return JsonResponse(data = {'status': 405,'success': False, 'message': 'This endpoint only supports PUT requests.'}, status = 405)
 
 # Update some user details; Need more implementation info before completing
+@csrf_exempt
 def updateUser(request):
     if request.method == 'PUT':
         body = request.body
@@ -65,6 +67,7 @@ def login(request, userName):
         return JsonResponse(data = {'status': 500,'success': False, 'message': 'Internal Server Error.'}, status = 500)
 
 # Get user's location
+@csrf_exempt
 def getLocation(request, userName):
     loc = findLocation(userName)
     if loc is None:
@@ -73,6 +76,7 @@ def getLocation(request, userName):
         return JsonResponse(data = {'status': 200, 'success': True, 'data': loc, 'message': 'Location fetched.'}, status = 200)
 
 # Set user's proxy location
+@csrf_exempt
 def setLocation(request, userName):
     body = request.body
     user = updateLocation(userName, body.latitude, body.longitude)
