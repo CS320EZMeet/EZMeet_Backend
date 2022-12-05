@@ -94,9 +94,8 @@ def updateLocation(userName, latitude, longitude, address):
                           database=env.NAME) as connection:
         with connection.cursor() as cursor:
             cursor.execute(f"UPDATE \"ezmeet-schema\".user_locations SET latitude = {latitude}, longitude = {longitude}, address = \'{address}\' WHERE Username = \'{userName}\'")
-            columns = [desc[0] for desc in cursor.description]
-            real_dict = [dict(zip(columns, row)) for row in cursor.fetchall()]
-    if len(real_dict) != 0:
-        return real_dict[0]
+            rowCount = cursor.rowcount
+    if rowCount != 0:
+        return 'Success'
     else:
         return None
