@@ -68,7 +68,7 @@ def updateFields(user):
                     cursor.execute(query)
             if user.get('preferences') is not None:
                 id = generatePreferenceID(user['preferences'])
-                cursor.execute("UPDATE \"ezmeet-schema\".user_preferences SET preference_list_id = %d WHERE Username = %s", (id, userName))
+                cursor.execute(f"UPDATE \"ezmeet-schema\".user_preferences SET preference_list_id = {id} WHERE Username = %s", (userName))
     return findUser(userName)
 
 def findLocation(userName):
