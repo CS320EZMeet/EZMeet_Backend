@@ -78,7 +78,7 @@ def findLocation(userName):
                           port=env.PORT, 
                           database=env.NAME) as connection:
         with connection.cursor() as cursor:
-            cursor.execute("SELECT latitude, longitude FROM \"ezmeet-schema\".user_locations WHERE Username = %s", (userName,))
+            cursor.execute("SELECT latitude, longitude, address FROM \"ezmeet-schema\".user_locations WHERE Username = %s", (userName,))
             columns = [desc[0] for desc in cursor.description]
             real_dict = [dict(zip(columns, row)) for row in cursor.fetchall()]
     if len(real_dict) != 0:
@@ -86,14 +86,14 @@ def findLocation(userName):
     else:
         return None
 
-def updateLocation(userName, latitude, longitude):
+def updateLocation(userName, latitude, longitude, address):
     with psycopg2.connect(user=env.USER, 
                           password=env.PASSWORD, 
                           host=env.HOST, 
                           port=env.PORT, 
                           database=env.NAME) as connection:
         with connection.cursor() as cursor:
-            cursor.execute("UPDATE \"ezmeet-schema\".user_locations SET latitude = %s, longitude = %s WHERE Username = %s", (latitude, longitude, userName))
+            cursor.execute(f"UPDATE \"ezmeet-schema\".user_locations SET latitude = {latitude}, longitude = {longitude}, address = {address} WHERE Username = {userName}")
             columns = [desc[0] for desc in cursor.description]
             real_dict = [dict(zip(columns, row)) for row in cursor.fetchall()]
     if len(real_dict) != 0:

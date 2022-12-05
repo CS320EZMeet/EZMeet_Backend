@@ -78,7 +78,7 @@ def login(request, userName):
 def getLocation(request, userName):
     loc = findLocation(userName)
     if loc is None:
-        return JsonResponse(data = {'status': 200, 'success': False, 'message': 'That account doesn\'t exist.'}, status = 200)
+        return JsonResponse(data = {'status': 404, 'success': False, 'message': 'That account doesn\'t exist.'}, status = 404)
     else:
         return JsonResponse(data = {'status': 200, 'success': True, 'data': loc, 'message': 'Location fetched.'}, status = 200)
 
@@ -86,12 +86,14 @@ def getLocation(request, userName):
 @csrf_exempt
 def setLocation(request, userName):
     body_unicode = request.body.decode('utf-8')
+    if body_unicode is None:
+        return JsonResponse(data = {'status': 401, 'success': False, 'message': 'Missing necessary data to complete request.'}, status = 401)
     body = json.loads(body_unicode)
-    user = updateLocation(userName, body['latitude'], body['longitude'])
+    user = updateLocation(userName, body['latitude'], body['longitude'], body['address'])
     if user is None:
-        return JsonResponse(data = {'status': 200, 'success': False, 'message': 'That account doesn\'t exist.'}, status = 200)
+        return JsonResponse(data = {'status': 404, 'success': False, 'message': 'That account doesn\'t exist.'}, status = 404)
     else:
-        return JsonResponse(data = {'status': 200, 'success': True, 'data': user, 'message': 'Preferences fetched.'}, status = 200)
+        return JsonResponse(data = {'status': 200, 'success': True, 'data': user, 'message': 'user locations updated.'}, status = 200)
 
 #user's preference list of activities they want to do
 def preferences(request, userName):
