@@ -17,7 +17,8 @@ def index(request):
 @csrf_exempt
 def registerUser(request, userName):
     if request.method == 'POST':
-        body = request.body
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
         user = {'userName': userName, 'email': body.email, 'password': body.password}
         if findUser(userName) is None:
             createUser(user)
@@ -31,7 +32,8 @@ def registerUser(request, userName):
 @csrf_exempt
 def updateUser(request):
     if request.method == 'PUT':
-        body = request.body
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
         if body is None or body.user is None:
             return JsonResponse(data = {'status': 401, 'success': False, 'message': 'Missing necessary data to complete request.'}, status = 401)
         
@@ -81,7 +83,8 @@ def getLocation(request, userName):
 # Set user's proxy location
 @csrf_exempt
 def setLocation(request, userName):
-    body = request.body
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
     user = updateLocation(userName, body.latitude, body.longitude)
     if user is None:
         return JsonResponse(data = {'status': 200, 'success': False, 'message': 'That account doesn\'t exist.'}, status = 200)
