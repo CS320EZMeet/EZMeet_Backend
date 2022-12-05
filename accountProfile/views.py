@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import *
+import json
 # Modules we may implement:
 # import simplejson as json
 # from django.contrib.auth.models import User
@@ -48,13 +49,15 @@ def updateUser(request):
 @csrf_exempt
 def login(request, userName):
     try:
+        body_unicode = request.body.decode('utf-8')
+        body_data = json.loads(body_unicode)
         if request.method == 'POST':
-            password = request.body.password
+            password = body_data['password']
             if password is None or password == '':
                 return JsonResponse(data = {'status': 401, 'success': False, 'message': 'No password received.'}, status = 401)
             user = findUser(userName)
             if user is not None:
-                if user.password == password:
+                if user['password'] == password:
                     return JsonResponse(data = {'status': 200, 'success': True, 'data': user, 'message': 'Logged-in.'}, status = 200)
                 else:
                     return JsonResponse(data = {'status': 401, 'success': False, 'message': 'Incorrect Password Entered. Please try again.'}, status = 200)
