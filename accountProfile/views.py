@@ -40,7 +40,7 @@ def updateUser(request):
             return JsonResponse(data = {'status': 401, 'success': False, 'message': 'Missing necessary data to complete request.'}, status = 401)
         
         user = body['user']    
-        if findUser(user.userName) is None:
+        if findUser(user['userName']) is None:
             return JsonResponse(data = {'status': 200, 'success': False, 'message': 'That account doesn\'t exist.'}, status = 200)
         
         newUser = updateFields(user)
