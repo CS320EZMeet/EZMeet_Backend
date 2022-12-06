@@ -16,7 +16,7 @@ def findUser(userName):
             prefID = cursor.fetchone()
     if (len(real_dict) != 0):
         res = real_dict[0]
-        res['preferences'] = generatePreferenceList(prefID[0]) if prefID != None else []
+        res['preferences'] = ["restaurant", "nature", "museums", "entertainment", "shopping"] if prefID is None else generatePreferenceList(prefID[0])
         return res
     else:
         return None
