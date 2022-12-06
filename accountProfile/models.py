@@ -14,9 +14,9 @@ def findUser(userName):
             real_dict = [dict(zip(columns, row)) for row in cursor.fetchall()]
             cursor.execute("SELECT Preference_list_id FROM \"ezmeet-schema\".user_preferences WHERE username = %s", (userName,))
             prefID = cursor.fetchone()
-    if (len(real_dict) != 0) and (prefID != None):
+    if (len(real_dict) != 0):
         res = real_dict[0]
-        res['preferences'] = generatePreferenceList(prefID[0])
+        res['preferences'] = generatePreferenceList(prefID[0]) if prefID != None else []
         return res
     else:
         return None
@@ -68,7 +68,7 @@ def updateFields(user):
                     cursor.execute(query)
             if user.get('preferences') is not None:
                 id = generatePreferenceID(user['preferences'])
-                cursor.execute("UPDATE \"ezmeet-schema\".user_preferences SET preference_list_id = %d WHERE Username = %s", (id, userName))
+                cursor.execute("UPDATE \"ezmeet-schema\".user_preferences SET preference_list_id = %s WHERE Username = %s", (id, userName))
     return findUser(userName)
 
 def findLocation(userName):

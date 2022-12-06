@@ -14,16 +14,15 @@ class accountProfileView(SimpleTestCase):
         email = content['data']['email']
         self.assertEqual(email,'yeet@yahoo.com')
 
-    #I'm struggling to get POST requests to work in tests. I feel somewhat confidant that the actual functionality works though.
     def test_login_success(self):
-        body = {"password": "12345"}
-        response = self.client.post('/user/login/Yeet/', body, content_type='application/json')
+        body = {"password": "abcde"}
+        response = self.client.post('/user/login/bobby/', body, content_type='application/json')
         self.assertEqual(response.status_code, 200)
         content = json.loads(response.content)
         success = content['success']
         self.assertEqual(success, True)
         userName = content['data']['username']
-        self.assertEqual(userName, 'Yeet')
+        self.assertEqual(userName, 'bobby')
     
     def test_login_incorrect_username(self):
         response = self.client.post('/user/login/eebydeeby/')
@@ -60,3 +59,10 @@ class accountProfileView(SimpleTestCase):
 #         createUser(user)
 #         response = self.client.get('/user/get/Foo/')
 #         self.assertEqual(response.status_code, 200)
+    
+    # def test_update_user(self):
+    #     body = {"user": {"userName": "Yeet", "password": "12345", "email": "yeet@yahoo.com", "group_id": 28, "show_location": False, "preferences": ["restaurant", "entertainment", "shopping"]}}
+    #     response = self.client.put('/user/update/Yeet/', body, content_type='application/json')
+    #     content = json.loads(response.content)
+    #     success = content['success']
+    #     self.assertEqual(success, True)
