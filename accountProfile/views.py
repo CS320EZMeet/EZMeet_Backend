@@ -19,8 +19,6 @@ def registerUser(request, userName):
     if request.method == 'POST':
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
-        print(body_unicode)
-        print(body)
         user = {'userName': userName, 'email': body['email'], 'password': body['password']}
         if findUser(userName) is None:
             createUser(user)
