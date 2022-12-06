@@ -21,7 +21,7 @@ def findUser(userName):
                     query = f"INSERT INTO \"ezmeet-schema\".user_preferences (Username, Preference_list_id) VALUES (\'{userName}\', 31)"
                     cursor.execute(query)
                 else:
-                    generatePreferenceList(prefID[0])
+                    res['preferences'] = generatePreferenceList(prefID[0])
                 return res
             else:
                 return None
