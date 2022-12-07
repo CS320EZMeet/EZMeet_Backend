@@ -10,7 +10,7 @@ def registerUser(request, userName):
     if request.method == 'POST':
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
-        user = {'userName': userName, 'email': body['email'], 'password': body['password']}
+        user = {'username': userName, 'email': body['email'], 'password': body['password']}
         if findUser(userName) is None:
             createUser(user)
             return JsonResponse(data = {'status': 200,'success': True, 'data': user, 'message': 'User created.'}, status = 200)
