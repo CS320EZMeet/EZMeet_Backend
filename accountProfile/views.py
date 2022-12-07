@@ -85,7 +85,7 @@ def getLocation(request, userName):
 def setLocation(request, userName):
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
-    user = updateLocation(userName, body['latitude'], body['longitude'])
+    user = updateLocation(userName, body['latitude'], body['longitude'], body['address'])
     if user is None:
         return JsonResponse(data = {'status': 200, 'success': False, 'message': 'That account doesn\'t exist.'}, status = 200)
     else:

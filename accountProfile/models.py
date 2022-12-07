@@ -57,8 +57,8 @@ def createUser(user):
         with connection.cursor() as cursor:
             cursor.execute("INSERT INTO \"ezmeet-schema\".users (Username, Password, Email, Show_location) VALUES (%s, %s, %s, False)",
                            (user['userName'], user['password'], user['email']))
-            cursor.execute("INSERT INTO \"ezmeet-schema\".user_preferences (username, preference_list_id) VALUES (%s, 31)", (user['userName']))
-            cursor.execute("INSERT INTO \"ezmeet-schema\".user_locations (username, latitude, longitude, Address) VALUES (%s, 0, 0, '')", (user['userName']))
+            cursor.execute(f"INSERT INTO \"ezmeet-schema\".user_preferences (username, preference_list_id) VALUES (\'{user['userName']}\', 31)")
+            cursor.execute(f"INSERT INTO \"ezmeet-schema\".user_locations (username, latitude, longitude, Address) VALUES (\'{user['userName']}\', 0, 0, \'\')")
     return user
 
 def updateFields(user):
