@@ -1,7 +1,14 @@
-from django.test import SimpleTestCase, TestCase
+from django.test import SimpleTestCase
 import json
-from accountProfile.views import registerUser
-from accountProfile.models import createUser
+from .models import findLocation
+
+# NOTE:
+# For simplicity, initial developmental testing that alters the DB (e.g. creating and updating users)
+# was done through simulated use cases through the website, and direct HTTP requests to back-end endpoints.
+# Once officially live for clients, more formal testing could be done in a separate class using the
+# 'TestCase' module in django.test, with Create DB rights applied, as this creates a duplicate, blank, test DB,
+# allowing one to repeat tests with the same data, and without tampering with the production DB.
+# For our purposes, this was deemed unnecessary, as we only used sample data, and had no outside clients.
 
 # Read-Only Tests Using Production DB
 class accountProfileView(SimpleTestCase):
@@ -36,33 +43,6 @@ class accountProfileView(SimpleTestCase):
         success = content['success']
         self.assertEqual(success, True)
         location = content['data']
-        self.assertEqual(location['latitude'], 122.1875)
-        self.assertEqual(location['longitude'], 68.61534)
-
-# Tests that interact with test DB
-# Need permission to create DB in Postgres, so that Django can generate a test DB for these
-# class accountProfileViewTestDB(TestCase):
-#     def test_register_user(self):
-#         body = {'method': 'POST', 'email': 'example@email.com', 'password': 'abc'}
-#         print(dir(body))
-#         request = self.client.post('/user/register/PenPen/', body, content_type='application/json')
-#         registerUser(request, 'PenPen')
-#         response = self.client.get('/user/get/PenPen/')
-#         self.assertEqual(response.status_code, 200)
-#         content = json.loads(response.content)
-#         #user = content['data']
-#         success = content['success']
-#         self.assertEqual(success, True)
-
-#     def test_create_user(self):
-#         user = {'userName': 'Foo', 'password': 'Bar', 'email': 'bat@email.com'}
-#         createUser(user)
-#         response = self.client.get('/user/get/Foo/')
-#         self.assertEqual(response.status_code, 200)
-    
-    # def test_update_user(self):
-    #     body = {"user": {"userName": "Yeet", "password": "12345", "email": "yeet@yahoo.com", "group_id": 28, "show_location": False, "preferences": ["restaurant", "entertainment", "shopping"]}}
-    #     response = self.client.put('/user/update/Yeet/', body, content_type='application/json')
-    #     content = json.loads(response.content)
-    #     success = content['success']
-    #     self.assertEqual(success, True)
+        location2 = findLocation('Yeet')
+        self.assertEqual(location['latitude'], location2['latitude'])
+        self.assertEqual(location['longitude'], location2['longitude'])

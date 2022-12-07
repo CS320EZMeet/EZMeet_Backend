@@ -2,6 +2,9 @@ from django.db import models
 import psycopg2
 import env
 
+# 'User' object is defined to contain all of a user's parameters in the User table of DB, plus their preference list
+
+# Find user with given userName in DB. Return their User object if they exist, else None
 def findUser(userName):
     with psycopg2.connect(user=env.USER, 
                           password=env.PASSWORD, 
@@ -26,6 +29,7 @@ def findUser(userName):
             else:
                 return None
 
+# Helper to convert Preference ID from DB to Preference List
 def generatePreferenceList(prefID):
     preferences = ["restaurant", "nature", "museums", "entertainment", "shopping"]
     res = []
@@ -38,6 +42,7 @@ def generatePreferenceList(prefID):
 
     return res
 
+# Helper to convert Preference List from front-end to Preference ID
 def generatePreferenceID(prefList):
     preferences = ["restaurant", "nature", "museums", "entertainment", "shopping"]
     nums = [16, 8, 4, 2, 1]
@@ -48,6 +53,7 @@ def generatePreferenceID(prefList):
 
     return res
 
+# Given essential User parameters (Username, Email, Password), add User to DB
 def createUser(user):
     with psycopg2.connect(user=env.USER, 
                           password=env.PASSWORD, 
@@ -59,6 +65,7 @@ def createUser(user):
                            (user['userName'], user['password'], user['email']))
     return user
 
+# Given any subset of a User object that includes a userName, update altered fields corresponding to that userName in DB
 def updateFields(user):
     with psycopg2.connect(user=env.USER, 
                           password=env.PASSWORD, 
@@ -76,6 +83,7 @@ def updateFields(user):
                 cursor.execute(f"UPDATE \"ezmeet-schema\".user_preferences SET preference_list_id = {id} WHERE Username = \'{userName}\'")
     return findUser(userName)
 
+# Given a userName, fetch the location of that user from DB
 def findLocation(userName):
     with psycopg2.connect(user=env.USER, 
                           password=env.PASSWORD, 
@@ -91,6 +99,7 @@ def findLocation(userName):
     else:
         return None
 
+# Given a user's userName, and a new latitude, longitude, and address string, update that user's location correspondingly
 def updateLocation(userName, latitude, longitude, address):
     with psycopg2.connect(user=env.USER, 
                           password=env.PASSWORD, 
