@@ -1,7 +1,7 @@
 from django.test import SimpleTestCase, TestCase
 from django.urls import reverse
 import json
-from .views import findPlacesHepler, calcMidpoint
+from .views import createRecommendationList, calcMidpoint, findPlacesHepler
 from .models import *
 
 class findMidpointView(SimpleTestCase):
@@ -33,9 +33,12 @@ class findMidpointView(SimpleTestCase):
         res = userLocations(groupUsers(4))
         self.assertEqual(res, [(-58.94865, -173.78905), (-106.24902, -28.07315)])
 
-    def test_findPlaces_helper(self):
+    def test_findPLaces_returns_correct_locations(self):
         locations = [[42.394332735132956, -72.52554483449866], [42.37672577037395, -72.51821887466069]]
         midpoint = calcMidpoint(locations)
-        places = findPlacesHepler(midpoint, "campground")
-        self.assertEqual(places, [('Khalsa Camp', 42.4556078, -72.5239966, '189 Long Plain Rd, Leverett, MA 01054, USA')])
-
+        places, places_ids = findPlacesHepler(midpoint, "movie_theater", 1610, set())
+        self.assertEqual(places, [('Amherst Cinema', 42.37513300000001, -72.52055349999999, '28 Amity St, Amherst, MA 01002, USA')])
+        self.assertEqual(places_ids, {'ChIJbSj71wnS5okRsNrCKZgS3os'})
+        places, places_ids = findPlacesHepler(midpoint, "movie_theater", 1610*1610, places_ids)
+        self.assertEqual(places, [('Cinemark at Hampshire Mall and XD', 42.3555527, -72.54711929999999, '367 Russell St, Hadley, MA 01035, USA')])
+        self.assertEqual(places_ids, {'ChIJbSj71wnS5okRsNrCKZgS3os', 'ChIJl36pLbDR5okRJTp1TrIsRRk'})
