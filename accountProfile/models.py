@@ -50,8 +50,10 @@ def createUser(user):
                           port=env.PORT, 
                           database=env.NAME) as connection:
         with connection.cursor() as cursor:
-            cursor.execute("INSERT INTO \"ezmeet-schema\".users (Username, Password, Email) VALUES (%s, %s, %s)",
+            cursor.execute("INSERT INTO \"ezmeet-schema\".users (Username, Password, Email, Show_location) VALUES (%s, %s, %s, False)",
                            (user['userName'], user['password'], user['email']))
+            cursor.execute("INSERT INTO \"ezmeet-schema\".user_preferences (username, preference_list_id) VALUES (%s, 31)", (user['userName']))
+            cursor.execute("INSERT INTO \"ezmeet-schema\".user_locations (username, latitude, longitude, Address) VALUES (%s, 0, 0, '')", (user['userName']))
     return user
 
 def updateFields(user):
