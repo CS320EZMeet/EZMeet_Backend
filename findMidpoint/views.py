@@ -131,7 +131,7 @@ def createRecommendationList(midpoint, types):
                         places_id.update(ids)
                         if len(locations) > 10:
                             break
-            #increase the radius of search
+            #increase the radius
             count += 1
             miles = math.pow(2, count)
         return locations

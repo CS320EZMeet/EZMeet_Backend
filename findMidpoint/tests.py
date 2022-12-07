@@ -33,6 +33,7 @@ class findMidpointView(SimpleTestCase):
         res = userLocations(groupUsers(4))
         self.assertEqual(res, [(-58.94865, -173.78905), (-106.24902, -28.07315)])
 
+
     def test_findPLaces_returns_correct_locations(self):
         locations = [[42.394332735132956, -72.52554483449866], [42.37672577037395, -72.51821887466069]]
         midpoint = calcMidpoint(locations)
