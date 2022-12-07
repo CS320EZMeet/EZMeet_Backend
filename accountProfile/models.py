@@ -14,12 +14,17 @@ def findUser(userName):
             real_dict = [dict(zip(columns, row)) for row in cursor.fetchall()]
             cursor.execute("SELECT Preference_list_id FROM \"ezmeet-schema\".user_preferences WHERE username = %s", (userName,))
             prefID = cursor.fetchone()
-    if (len(real_dict) != 0) and (prefID != None):
-        res = real_dict[0]
-        res['preferences'] = generatePreferenceList(prefID[0])
-        return res
-    else:
-        return None
+            if (len(real_dict) != 0):
+                res = real_dict[0]
+                if prefID is None:
+                    res['preferences'] = ["restaurant", "nature", "museums", "entertainment", "shopping"]
+                    query = f"INSERT INTO \"ezmeet-schema\".user_preferences (Username, Preference_list_id) VALUES (\'{userName}\', 31)"
+                    cursor.execute(query)
+                else:
+                    res['preferences'] = generatePreferenceList(prefID[0])
+                return res
+            else:
+                return None
 
 def generatePreferenceList(prefID):
     preferences = ["restaurant", "nature", "museums", "entertainment", "shopping"]
