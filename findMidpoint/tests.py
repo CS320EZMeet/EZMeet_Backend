@@ -22,16 +22,16 @@ class findMidpointView(SimpleTestCase):
         self.assertEqual(res, (True, True, True, True, False))
     
     def test_groupUsers_returns_correct_users(self):
-        users = groupUsers(4)
-        self.assertEqual(users, ["Tinky Winky", "Top G"])
+        users = groupUsers(46)
+        self.assertEqual(users, ["oof", "NewAccountTest"])
     
     def test_userPreferences_return_correct_preference(self):
-        res = userPreferences(groupUsers(8))
-        self.assertEqual(res, [28, 30])
+        res = userPreferences(groupUsers(46))
+        self.assertEqual(res, [27, 31])
 
     def test_userLocations_returns_correct_location(self):
-        res = userLocations(groupUsers(4))
-        self.assertEqual(res, [(-58.94865, -173.78905), (-106.24902, -28.07315)])
+        res = userLocations(groupUsers(46))
+        self.assertEqual(res, [(42.3936974, -72.5317708), (42.3936974, -72.5317708)])
 
     def test_findPlaces_helper(self):
         locations = [[42.394332735132956, -72.52554483449866], [42.37672577037395, -72.51821887466069]]

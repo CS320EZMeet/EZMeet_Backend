@@ -31,13 +31,13 @@ class accountProfileView(SimpleTestCase):
         self.assertEqual(success, False)
 
     def test_get_location(self):
-        response = self.client.get('/user/getLocation/Yeet/')
+        response = self.client.get('/user/getLocation/NewAccountTest/')
         content = json.loads(response.content)
         success = content['success']
         self.assertEqual(success, True)
         location = content['data']
-        self.assertEqual(location['latitude'], 122.1875)
-        self.assertEqual(location['longitude'], 68.61534)
+        self.assertEqual(location['latitude'], 42.3936974)
+        self.assertEqual(location['longitude'], -72.5317708)
 
 # Tests that interact with test DB
 # Need permission to create DB in Postgres, so that Django can generate a test DB for these
