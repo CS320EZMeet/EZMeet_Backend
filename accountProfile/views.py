@@ -3,17 +3,8 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import *
 import json
-# Modules we may implement:
-# import simplejson as json
-# from django.contrib.auth.models import User
-# from rest_framework import viewsets
-# from .serializers import UserSerializer
 
-#welcome page
-def index(request):
-    return HttpResponse("Welcome page to Account profile")
-
-# A possible template for creating a user from front-end form, and placing in DB (For ALPHA release)
+# Registers a user
 @csrf_exempt
 def registerUser(request, userName):
     if request.method == 'POST':
@@ -28,7 +19,7 @@ def registerUser(request, userName):
     else:
         return JsonResponse(data = {'status': 405,'success': False, 'message': 'This endpoint only supports PUT requests.'}, status = 405)
 
-# Update some user details; Need more implementation info before completing
+# Update user details
 @csrf_exempt
 def updateUser(request, userName):
     if request.method == 'PUT':
@@ -47,7 +38,7 @@ def updateUser(request, userName):
     else:
         return JsonResponse(data = {'status': 405,'success': False, 'message': 'This endpoint only supports PUT requests.'}, status = 405)
     
-# Password will be properly verified in final release
+# Login to account
 @csrf_exempt
 def login(request, userName):
     try:
@@ -80,7 +71,7 @@ def getLocation(request, userName):
     else:
         return JsonResponse(data = {'status': 200, 'success': True, 'data': loc, 'message': 'Location fetched.'}, status = 200)
 
-# Set user's proxy location
+# Set user's location
 @csrf_exempt
 def setLocation(request, userName):
     body_unicode = request.body.decode('utf-8')
@@ -91,15 +82,7 @@ def setLocation(request, userName):
     else:
         return JsonResponse(data = {'status': 200, 'success': True, 'data': user, 'message': 'Preferences fetched.'}, status = 200)
 
-#user's preference list of activities they want to do
-def preferences(request, userName):
-    user = findUser(userName)
-    if user is None:
-        return JsonResponse(data = {'status': 200, 'success': False, 'message': 'That account doesn\'t exist.'}, status = 200)
-    else:
-        return JsonResponse(data = {'status': 200, 'success': True, 'data': user['Preferences'], 'message': 'Preferences fetched.'}, status = 200)
-
-#Sample endpoint to get used to Django
+#Get a user's data
 @csrf_exempt
 def get(request, userName):
     if request.method == 'GET':
